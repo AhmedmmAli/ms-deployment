@@ -1,0 +1,37 @@
+stages:
+  - build
+
+variables:
+  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  AWS_ECR_URL: $AWS_ECR_URL
+  AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+
+ci_to_ecr:
+  stage: build
+  image: 
+    name: amazonlinux:2
+    entrypoint: [""]
+  before_script:
+    - echo "install dependencies"
+    - yum update -y && yum install -y curl docker git jq
+    - echo "Setting up AWS CLI"
+    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    - unzip awscliv2.zip
+    - sudo ./aws/install
+
+  script:
+    - echo "Login to AWS ECR"
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ECR_URL
+    - echo "Clone git repository"
+    - git clone git@github.com:AhmedmmAli/ms-deployment.git
+    - cd ms-deployment/miscroservice
+    - echo "Build docker image"
+    - docker build -t ms-app .
+    - echo "Tag docker image"
+    - docker tag ms-app:latest $AWS_ECR_URL/$REPOSITORY_NAME:latest
+    - echo "Push docker image to AWS ECR"
+    - docker push $AWS_ECR_URL/ms-app:latest
+
+  only:
+    - main
