@@ -11,7 +11,7 @@ module "vpc" {
   vpc_dns_support               = var.cluster_vpc_dns_support
   environment                   = var.environment
 }
-
+#Create AWS EKS cluster
 module "eks" {
   source                        = "./modules/eks"
   eks_cluster_name              = var.cluster_eks_cluster_name
@@ -28,4 +28,9 @@ module "eks" {
   eks_principal_arn             = var.cluster_eks_principal_arn
   eks_policy_arn                = var.cluster_eks_policy_arn
   environment                   = var.environment
+}
+
+#Create AWS ECR repositories
+module "ecr_repositories" {
+  source = "./modules/ecr"
 }
