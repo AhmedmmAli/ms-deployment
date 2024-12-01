@@ -14,6 +14,7 @@ Resources:
 - AWS Public and private subnets
 - AWS route tables
 - AWS EKS version 1.30 with CNI, kube-proxy and coreDNS addons
+- AWS ECR
 
 ##### Terraform gitlabCI
 - Fists stage, (fmt) will make sure to run terraform fmt
@@ -21,7 +22,7 @@ Resources:
 - Third stage, will deploy the resources on AWS environment with manual approval and only on the main branch.
 - Fourth stage, will destory the resources created on AWS with manual approval and only on the main branch.
 
-#### k8s-files folder
+##### k8s-files folder
 This folder contains all kubernets files that will be used to deploy Python microservice on EKS cluster.
 Files:
 - Python microservice deployment file
@@ -30,3 +31,7 @@ Files:
 - Python microservice PDB file
 - Python microservice Ingress file
 - Python microservice argoCD configurations file
+
+##### Tools installed on the cluster
+- Nginx-ingress
+- ArgoCD
