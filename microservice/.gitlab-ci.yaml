@@ -6,6 +6,7 @@ variables:
   AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   AWS_ECR_URL: $AWS_ECR_URL
   AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+  AWS_REPOSITORY_NAME: $REPOSITORY_NAME
 
 ci_to_ecr:
   stage: build
@@ -31,7 +32,7 @@ ci_to_ecr:
     - echo "Tag docker image"
     - docker tag ms-app:latest $AWS_ECR_URL/$REPOSITORY_NAME:latest
     - echo "Push docker image to AWS ECR"
-    - docker push $AWS_ECR_URL/ms-app:latest
+    - docker push $AWS_ECR_URL/$REPOSITORY_NAME:latest
 
   only:
     - main
